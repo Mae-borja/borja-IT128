@@ -280,25 +280,6 @@ ALTER TABLE [dbo].[Posts]
 
 
 GO
-PRINT N'Creating Procedure [dbo].[spUsers_Register]...';
-
-
-GO
-CREATE PROCEDURE [dbo].[spUsers_Register]
-	@userName nvarchar(16),
-	@firstName nvarchar(50),
-	@lastName nvarchar(50),
-	@password nvarchar(16)
-
-AS
-BEGIN
-	SET NOCOUNT ON;
-
-	INSERT INTO dbo.Users
-	(UserName, FirstName, LastName, Password)
-	VALUES (@userName, @firstName, @lastName, @password)
-END
-GO
 PRINT N'Creating Procedure [dbo].[spUsers_Authenticate]...';
 
 
@@ -317,54 +298,23 @@ BEGIN
 
 END
 GO
-PRINT N'Creating Procedure [dbo].[spPosts_Insert]...';
+PRINT N'Creating Procedure [dbo].[spUsers_Register]...';
 
 
 GO
-CREATE PROCEDURE [dbo].[spPosts_Insert]
-	@userId int,
-	@title nvarchar(150),
-	@body text,
-	@dateCreated datetime2
-AS
-BEGIN
-	INSERT INTO dbo.Posts
-	(UserId, Title, Body, DateCreated)
-	VALUES
-	(@userId, @title, @body, @dateCreated)
-END
-GO
-PRINT N'Creating Procedure [dbo].[spPosts_List]...';
+CREATE PROCEDURE [dbo].[spUsers_Register]
+	@userName nvarchar(16),
+	@firstName nvarchar(50),
+	@lastName nvarchar(50),
+	@password nvarchar(16)
 
-
-GO
-CREATE PROCEDURE [dbo].[spPosts_List]
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT [p].[Id], [p].[Title], [p].[Body], [p].[DateCreated], [u].[UserName], [u].[FirstName], [u].[LastName]
-	FROM dbo.Posts p
-	INNER JOIN dbo.Users u
-	ON p.UserId = u.Id
-END
-GO
-PRINT N'Creating Procedure [dbo].[spPosts_Detail]...';
-
-
-GO
-CREATE PROCEDURE [dbo].[spPosts_Detail]
-	@id int
-	
-AS
-BEGIN
-	SET NOCOUNT ON;
-
-	SELECT [p].[Id], [p].[Title], [p].[Body], [p].[DateCreated], [u].[UserName], [u].[FirstName], [u].[LastName]
-	FROM dbo.Posts p
-	INNER JOIN dbo.Users u
-	ON p.UserId = u.Id
-	WHERE p.Id = @id;
+	INSERT INTO dbo.Users
+	(UserName, FirstName, LastName, Password)
+	VALUES (@userName, @firstName, @lastName, @password)
 END
 GO
 DECLARE @VarDecimalSupported AS BIT;
