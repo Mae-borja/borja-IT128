@@ -11,11 +11,11 @@ namespace BlogTestUI
         {
             SqlData db = GetConnection();
 
-            //Register(db);
-            //Authenticate(db);
+            Register(db);
+            Authenticate(db);
             AddPost(db);
-            //ListPosts(db);
-            //ShowPostDetails(db);
+            ListPosts(db);
+            ShowPostDetails(db);
 
 
             Console.WriteLine("Press Enter to exit...");
