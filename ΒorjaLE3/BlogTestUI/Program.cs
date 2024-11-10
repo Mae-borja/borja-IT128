@@ -10,7 +10,12 @@ namespace BlogTestUI
         static void Main(string[] args)
         {
             SqlData db = GetConnection();
-            Authenticate(db);
+            //Authenticate(db);
+            //Register(db);
+            AddPost(db);
+            //ListPosts(db);
+            //ShowPostDetails(db);
+
 
             Console.WriteLine("Press Enter to exit...");
             Console.ReadLine();
@@ -55,5 +60,71 @@ namespace BlogTestUI
                 Console.WriteLine($"Welcome, {user.UserName}");
             }
         }
+
+        public static void Register(SqlData db)
+        {
+            Console.Write("Enter new username: ");
+            var username = Console.ReadLine();
+
+            Console.Write("Enter new password: ");
+            var password = Console.ReadLine();
+
+            Console.Write("Enter new first name: ");
+            var firstName = Console.ReadLine();
+
+            Console.Write("Enter new last name: ");
+            var lastName = Console.ReadLine();
+
+            db.Register(username, firstName, lastName, password);
+        }
+
+        private static void AddPost(SqlData db)
+        {
+            UserModel user = GetCurrentUser(db);
+
+            Console.Write("Title: ");
+            string title = Console.ReadLine();
+
+            Console.WriteLine("Write Body: ");
+            string body = Console.ReadLine();
+
+            PostModel post = new PostModel
+            {
+                Title = title,
+                Body = body,
+                DateCreated = DateTime.Now,
+                UserId = user.Id
+            };
+            db.AddPost(post);
+        }
+
+        private static void ListPosts(SqlData db)
+        {
+            List<ListPostModel> posts = db.ListPosts();
+
+            foreach (ListPostModel post in posts)
+            {
+                Console.WriteLine($"{post.Id}. Title: {post.Title} by {post.UserName} [{post.DateCreated.ToString("yyyy-MM-dd")}]");
+                Console.WriteLine($"{post.Body.Substring(0, 20)}...");
+                Console.WriteLine();
+            }
+        }
+
+        private static void ShowPostDetails(SqlData db)
+        {
+            Console.Write("Enter a post ID: ");
+            int id = Int32.Parse(Console.ReadLine());
+
+            ListPostModel post = db.ShowPostDetails(id);
+            Console.WriteLine(post.Title);
+            Console.WriteLine($"by {post.FirstName} {post.LastName} [{post.UserName}]");
+
+            Console.WriteLine();
+
+            Console.WriteLine(post.Body);
+
+            Console.WriteLine(post.DateCreated.ToString("MMM d yyyy"));
+        }
+
     }
 }
